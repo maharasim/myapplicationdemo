@@ -1,19 +1,22 @@
-var http=require('http');
-var fs=require('fs');
-http.createServer(function(req,res) {
-    res.writeHead(200,{'Content-Type':'text/html' });
-    var url=req.url;
-    if(url==='/') {
-        fs.readFile('first.html',function(err,hello){
-            if(err)
-               res.write("file not found");
-            else{
-                res.writeHead(200,{'Content-Type':'text/html'});
-                res.write(hello);
-                res.end();
+
+var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, resp) {
+    if (req.url === "/") {
+        fs.readFile("first.html", function (error, sample) {
+            if (error) {
+                resp.writeHead(404);
+                resp.write('Contents you are looking are Not Found');
+            } else {
+                resp.writeHead(200, { 'Content-Type': 'text/html' });
+                resp.write(sample);
             }
-        
-    }).listen(3000,function(){
-        console.log("server started port:3000");
-    });
-}
+             
+            resp.end();
+        });
+    } 
+});
+
+server.listen(3000);
+ 
+console.log('Server Started listening on 3000');
